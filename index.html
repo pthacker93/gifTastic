@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <title>Button Trigger AJAX</title>
+    <style></style>
+
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="row">
+
+            <div id="buttons-view" class="col-lg-12">
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-8">
+
+                <div id="GIFArea">
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+                <h3>Add an animal</h3>
+                <br>
+                <input id="userInput" type="text"></input>
+                <br>
+                <input id="submitButton" type="submit">
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      
+      var btns = [];
+
+    
+      function displayGIFInfo() {
+
+        var btn = $(this).attr("data-name");
+        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + btn + "&apikey=OniByyKce1ftTNclVz58TTpvBoWYbmEl&limit=10";
+
+        
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).then(function(response) {
+
+         
+          var createdGif = $("<div class='gif'>");
+
+      
+          var rating = response.Rated;
+
+        
+          var pOne = $("<p>").text("Rating: " + rating);
+
+         
+          createdGif.append(pOne);
+
+
+
+         
+          var imgURL = response;
+
+        
+          var image = $("<img>").attr("src", imgURL);
+
+        
+          createdGif.append(image);
+
+      
+          $("#GIFArea").prepend(createdGif);
+        });
+
+      }
+
+    
+      function renderButtons() {
+
+       
+        $("#buttons-view").empty();
+
+        
+        for (var i = 0; i < btns.length; i++) {
+
+         
+          var a = $("<button>");
+          
+          a.addClass("gif-btn");
+        
+          a.attr("data-name", btns[i]);
+         
+          a.text(btns[i]);
+        
+          $("#buttons-view").append(a);
+        }
+      }
+
+     
+      $("#buttons-view").on("click", function(event) {
+        event.preventDefault();
+     
+        var newBtn = $("#userInput").val().trim();
+
+       
+        btns.push(newBtn);
+
+        renderButtons();
+      });
+
+      
+      $(document).on("click", ".gif-btn", displayGIFInfo);
+
+    
+      renderButtons();
+      </script>
+</body>
+
+
+
+</html>
